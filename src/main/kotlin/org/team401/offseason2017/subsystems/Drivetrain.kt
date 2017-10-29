@@ -1,13 +1,11 @@
 package org.team401.offseason2017.subsystems
 
 import com.ctre.phoenix.Drive.SensoredTank
-import com.ctre.phoenix.Mechanical.Gearbox
 import com.ctre.phoenix.Mechanical.SensoredGearbox
 import com.ctre.phoenix.MotorControl.CAN.TalonSRX
 import com.ctre.phoenix.MotorControl.SmartMotorController
 import edu.wpi.first.wpilibj.Solenoid
 import org.team401.offseason2017.Constants
-import org.team401.snakeskin.component.MotorGroup
 import org.team401.snakeskin.dsl.buildSubsystem
 import org.team401.snakeskin.event.Events
 import org.team401.snakeskin.subsystem.Subsystem
