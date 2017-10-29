@@ -1,5 +1,7 @@
 package org.team401.offseason2017
 
+import org.team401.snakeskin.component.LightLink
+
 object Constants {
     object Events {
         const val ZERO_SENSORS = "zero_sensors"
@@ -30,11 +32,11 @@ object Constants {
     }
 
     object ArmParameters {
-        const val HOME_POS = 1000.0
+        const val HOME_POS = 809.0
 
-        const val DOWN_POS = HOME_POS + 190.0
-        const val UP_POS = HOME_POS + 267.0
-        const val STOW_POS = HOME_POS + 0.0
+        const val DOWN_POS = HOME_POS + 1625.0
+        const val UP_POS = HOME_POS + 632.0
+        const val STOW_POS = HOME_POS + 99.0
 
         const val P = 1.5
         const val SCORE_P = 1.0
@@ -54,5 +56,11 @@ object Constants {
 
         const val CLIMBER_LEFT_CLIMB_CURRENT = 0.0
         const val CLIMBER_RIGHT_CLIMB_CURRENT = 0.0
+    }
+
+    object SignalColors {
+        const val WANT_GEAR = LightLink.Color.BLUE
+        const val GOT_GEAR = LightLink.Color.GREEN
+        const val SCORED_GEAR = LightLink.Color.GREEN
     }
 }

@@ -1,4 +1,5 @@
 import org.team401.offseason2017.DriveStick
+import org.team401.offseason2017.LightBar
 import org.team401.offseason2017.MashStick
 import org.team401.offseason2017.Wheel
 import org.team401.offseason2017.subsystems.Climber
@@ -23,4 +24,5 @@ import org.team401.snakeskin.registry.Subsystems
 fun setup() {
     Subsystems.add(GearHolder, Drivetrain, Climber)
     Controllers.add(Wheel, DriveStick, MashStick)
+    LightBar.off()
 }

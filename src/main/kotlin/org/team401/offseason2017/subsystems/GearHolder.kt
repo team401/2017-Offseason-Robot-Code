@@ -3,6 +3,8 @@ package org.team401.offseason2017.subsystems
 import com.ctre.CANTalon
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.team401.offseason2017.Constants
+import org.team401.offseason2017.LightBar
+import org.team401.snakeskin.component.LightLink
 import org.team401.snakeskin.dsl.buildSubsystem
 import org.team401.snakeskin.event.Events
 import org.team401.snakeskin.subsystem.Subsystem
@@ -100,6 +102,7 @@ val GearHolder: Subsystem = buildSubsystem {
             entry {
                 closedLoop()
                 arm.setpoint = Constants.ArmParameters.DOWN_POS
+                LightBar.signal(Constants.SignalColors.WANT_GEAR)
             }
         }
 
@@ -107,6 +110,7 @@ val GearHolder: Subsystem = buildSubsystem {
             entry {
                 closedLoopScore()
                 arm.setpoint = Constants.ArmParameters.DOWN_POS
+                LightBar.signal(Constants.SignalColors.SCORED_GEAR)
             }
         }
 

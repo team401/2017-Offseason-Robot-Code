@@ -33,6 +33,7 @@ val DriveStick = HumanControls.attack3(1) {
 }
 
 val MashStick = HumanControls.extreme3d(2) {
+    /*
     whenHatChanged(Hats.STICK_HAT) {
         when (it) {
             Direction.NORTH -> Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.CLIMB)
@@ -46,6 +47,17 @@ val MashStick = HumanControls.extreme3d(2) {
         }
         released {
             Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.OFF)
+        }
+    }
+    */
+
+    whenHatChanged(Hats.STICK_HAT) {
+        val arm = GearHolder.machine(GEAR_ARM_MACHINE)
+        when (it) {
+            Direction.WEST -> arm.setState(GearArmStates.STOW)
+            Direction.SOUTH -> arm.setState(GearArmStates.DOWN)
+            Direction.EAST -> arm.setState(GearArmStates.DOWN_SCORE)
+            Direction.NORTH -> arm.setState(GearArmStates.UP)
         }
     }
 }
