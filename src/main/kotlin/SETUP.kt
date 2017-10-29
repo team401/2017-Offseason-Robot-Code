@@ -1,4 +1,3 @@
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.team401.offseason2017.DriveStick
 import org.team401.offseason2017.MashStick
 import org.team401.offseason2017.Wheel
@@ -6,7 +5,6 @@ import org.team401.offseason2017.subsystems.Climber
 import org.team401.offseason2017.subsystems.Drivetrain
 import org.team401.offseason2017.subsystems.GearHolder
 import org.team401.snakeskin.registry.Controllers
-import org.team401.snakeskin.registry.Sensors
 import org.team401.snakeskin.registry.Subsystems
 
 /*
@@ -23,6 +21,6 @@ import org.team401.snakeskin.registry.Subsystems
  */
 
 fun setup() {
-    Subsystems.add(Drivetrain, GearHolder, Climber)
+    Subsystems.add(GearHolder, Drivetrain, Climber)
     Controllers.add(Wheel, DriveStick, MashStick)
 }

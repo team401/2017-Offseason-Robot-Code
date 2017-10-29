@@ -1,7 +1,6 @@
 package org.team401.offseason2017.subsystems
 
-import com.ctre.MotorControl.CANTalon
-import com.ctre.MotorControl.SmartMotorController
+import com.ctre.CANTalon
 import edu.wpi.first.wpilibj.Solenoid
 import org.team401.offseason2017.Constants
 import org.team401.snakeskin.component.MotorGroup
@@ -52,7 +51,7 @@ val Drivetrain: Subsystem = buildSubsystem {
 
     fun fuse(master: Int, vararg slaves: CANTalon) {
         slaves.forEach {
-            it.changeControlMode(SmartMotorController.TalonControlMode.Follower)
+            it.changeControlMode(CANTalon.TalonControlMode.Follower)
             it.set(master.toDouble())
         }
     }

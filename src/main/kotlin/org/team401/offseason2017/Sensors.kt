@@ -1,5 +1,7 @@
 package org.team401.offseason2017
 
+import org.team401.snakeskin.dsl.Sensors
+
 /*
  * 2017-Offseason-Robot-Code - Created on 9/26/17
  * Author: Cameron Earle
