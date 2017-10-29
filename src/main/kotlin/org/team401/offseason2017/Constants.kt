@@ -55,4 +55,9 @@ object Constants {
         const val CLIMBER_LEFT_CLIMB_CURRENT = 0.0
         const val CLIMBER_RIGHT_CLIMB_CURRENT = 0.0
     }
+
+    object DrivetrainParameters {
+        const val WHEEL_RADIUS = 2f
+        const val WHEEL_DIST = 5.5f
+    }
 }
