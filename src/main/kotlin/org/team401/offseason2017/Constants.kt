@@ -18,8 +18,8 @@ object Constants {
         const val DRIVE_RIGHT_REAR_CAN = 10
         const val CLIMBER_RIGHT_PWM = 1
 
-        const val CLIMBER_LEFT_PDP_CHANNEL = 0
-        const val CLIMBER_RIGHT_PDP_CHANNEL = 0
+        const val CLIMBER_LEFT_PDP_CHANNEL = 11
+        const val CLIMBER_RIGHT_PDP_CHANNEL = 4
 
         const val GEAR_ARM = 1
         const val INTAKE = 2
