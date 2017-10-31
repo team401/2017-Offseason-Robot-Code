@@ -20,8 +20,8 @@ object Constants {
         const val DRIVE_RIGHT_REAR_CAN = 10
         const val CLIMBER_RIGHT_PWM = 1
 
-        const val CLIMBER_LEFT_PDP_CHANNEL = 0
-        const val CLIMBER_RIGHT_PDP_CHANNEL = 0
+        const val CLIMBER_LEFT_PDP_CHANNEL = 11
+        const val CLIMBER_RIGHT_PDP_CHANNEL = 4
 
         const val GEAR_ARM = 1
         const val INTAKE = 2
@@ -57,7 +57,7 @@ object Constants {
         const val CLIMBER_LEFT_CLIMB_CURRENT = 0.0
         const val CLIMBER_RIGHT_CLIMB_CURRENT = 0.0
     }
-
+  
     object DrivetrainParameters {
         const val WHEEL_RADIUS = 2f
         const val WHEEL_DIST = 5.5f
