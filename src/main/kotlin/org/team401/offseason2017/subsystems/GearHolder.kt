@@ -4,6 +4,7 @@ import com.ctre.phoenix.MotorControl.CAN.TalonSRX
 import com.ctre.phoenix.MotorControl.SmartMotorController
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.team401.offseason2017.Constants
+import org.team401.offseason2017.LightBar
 import org.team401.snakeskin.dsl.buildSubsystem
 import org.team401.snakeskin.event.Events
 import org.team401.snakeskin.subsystem.Subsystem
@@ -38,8 +39,8 @@ object GearIntakeStates {
 const val GEAR_INTAKE_MACHINE = "gear_intake"
 
 val GearHolder: Subsystem = buildSubsystem {
-    val arm = TalonSRX(Constants.MotorControllers.GEAR_ARM)
-    val wheels = TalonSRX(Constants.MotorControllers.INTAKE)
+    val arm = TalonSRX(Constants.MotorControllers.GEAR_ARM_CAN)
+    val wheels = TalonSRX(Constants.MotorControllers.GEAR_INTAKE_CAN)
 
     setup {
         arm.setFeedbackDevice(SmartMotorController.FeedbackDevice.CtreMagEncoder_Absolute)
@@ -101,6 +102,7 @@ val GearHolder: Subsystem = buildSubsystem {
             entry {
                 closedLoop()
                 arm.setpoint = Constants.ArmParameters.DOWN_POS
+                LightBar.signal(Constants.SignalColors.WANT_GEAR)
             }
         }
 
@@ -108,6 +110,7 @@ val GearHolder: Subsystem = buildSubsystem {
             entry {
                 closedLoopScore()
                 arm.setpoint = Constants.ArmParameters.DOWN_POS
+                LightBar.signal(Constants.SignalColors.SCORED_GEAR)
             }
         }
 
