@@ -40,7 +40,6 @@ val MashStick = HumanControls.extreme3d(2) {
             Direction.SOUTH -> Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.OFF)
         }
     }
-
     whenButton(Buttons.BASE_BOTTOM_RIGHT) {
         pressed {
             Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.MANUAL_CLIMB)

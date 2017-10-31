@@ -39,12 +39,18 @@ repositories {
 	maven { url "http://dl.bintray.com/team401/SnakeSkin" }
 }
 
+wpi {
+    //ctreVersion = "5.0.2.1" //TODO Get v5 working
+}
+
 dependencies {
     compile wpilib()
-    compile ctre()
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile(group: 'org.team401', name: 'snakeskin', version: '+')
+
+    compile   fileTree(dir: 'lib', include: '**/*.jar')
+    nativeLib fileTree(dir: 'lib', include: '**/*.so')
 }
 
 jar {

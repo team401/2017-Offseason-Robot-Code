@@ -1,6 +1,7 @@
 package org.team401.offseason2017.subsystems
 
-import com.ctre.CANTalon
+import com.ctre.phoenix.MotorControl.CAN.TalonSRX
+import com.ctre.phoenix.MotorControl.SmartMotorController
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.team401.offseason2017.Constants
 import org.team401.offseason2017.LightBar
@@ -39,22 +40,22 @@ object GearIntakeStates {
 const val GEAR_INTAKE_MACHINE = "gear_intake"
 
 val GearHolder: Subsystem = buildSubsystem {
-    val arm = CANTalon(Constants.MotorControllers.GEAR_ARM)
-    val wheels = CANTalon(Constants.MotorControllers.INTAKE)
+    val arm = TalonSRX(Constants.MotorControllers.GEAR_ARM_CAN)
+    val wheels = TalonSRX(Constants.MotorControllers.GEAR_INTAKE_CAN)
 
     setup {
-        arm.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Absolute)
+        arm.setFeedbackDevice(SmartMotorController.FeedbackDevice.CtreMagEncoder_Absolute)
         arm.isSafetyEnabled = false
         arm.configMaxOutputVoltage(6.0)
 
         wheels.isSafetyEnabled = false
 
-        arm.position = (arm.pulseWidthPosition % 4096).toDouble()
+        arm.setPosition(arm.pulseWidthPosition % 4096)
     }
 
     val wheelsMachine = stateMachine(GEAR_INTAKE_MACHINE) {
-        fun voltage() = wheels.changeControlMode(CANTalon.TalonControlMode.Voltage)
-        fun openLoop() = wheels.changeControlMode(CANTalon.TalonControlMode.PercentVbus)
+        fun voltage() = wheels.changeControlMode(SmartMotorController.TalonControlMode.Voltage)
+        fun openLoop() = wheels.changeControlMode(SmartMotorController.TalonControlMode.PercentVbus)
 
         state(GearIntakeStates.COLLECT) {
             entry {
@@ -88,15 +89,15 @@ val GearHolder: Subsystem = buildSubsystem {
     val armMachine = stateMachine(GEAR_ARM_MACHINE) {
         fun closedLoop() {
             arm.configMaxOutputVoltage(Constants.ArmParameters.NORM_VOLTAGE)
-            arm.changeControlMode(CANTalon.TalonControlMode.Position)
+            arm.changeControlMode(SmartMotorController.TalonControlMode.Position)
             arm.p = Constants.ArmParameters.P
         }
         fun closedLoopScore() {
             arm.configMaxOutputVoltage(Constants.ArmParameters.SCORE_VOLTAGE)
-            arm.changeControlMode(CANTalon.TalonControlMode.Position)
+            arm.changeControlMode(SmartMotorController.TalonControlMode.Position)
             arm.p = Constants.ArmParameters.SCORE_P
         }
-        fun openLoop() = arm.changeControlMode(CANTalon.TalonControlMode.PercentVbus)
+        fun openLoop() = arm.changeControlMode(SmartMotorController.TalonControlMode.PercentVbus)
 
         state(GearArmStates.DOWN) {
             entry {

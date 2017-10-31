@@ -34,8 +34,8 @@ object Constants {
     object ArmParameters {
         const val HOME_POS = 809.0
 
-        const val DOWN_POS = HOME_POS + 1625.0
-        const val UP_POS = HOME_POS + 632.0
+        const val DOWN_POS = HOME_POS + 1617.0
+        const val UP_POS = HOME_POS + 521.0
         const val STOW_POS = HOME_POS + 99.0
 
         const val P = 1.5
@@ -56,6 +56,11 @@ object Constants {
 
         const val CLIMBER_LEFT_CLIMB_CURRENT = 0.0
         const val CLIMBER_RIGHT_CLIMB_CURRENT = 0.0
+    }
+  
+    object DrivetrainParameters {
+        const val WHEEL_RADIUS = 2f
+        const val WHEEL_DIST = 5.5f
     }
 
     object SignalColors {

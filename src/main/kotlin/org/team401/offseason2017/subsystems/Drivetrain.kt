@@ -1,9 +1,11 @@
 package org.team401.offseason2017.subsystems
 
-import com.ctre.CANTalon
+import com.ctre.phoenix.Drive.SensoredTank
+import com.ctre.phoenix.Mechanical.SensoredGearbox
+import com.ctre.phoenix.MotorControl.CAN.TalonSRX
+import com.ctre.phoenix.MotorControl.SmartMotorController
 import edu.wpi.first.wpilibj.Solenoid
 import org.team401.offseason2017.Constants
-import org.team401.snakeskin.component.MotorGroup
 import org.team401.snakeskin.dsl.buildSubsystem
 import org.team401.snakeskin.event.Events
 import org.team401.snakeskin.subsystem.Subsystem
@@ -34,33 +36,22 @@ object DrivetrainStates {
 const val DRIVETRAIN_MACHINE = "drive"
 
 val Drivetrain: Subsystem = buildSubsystem {
-    val leftFront = CANTalon(Constants.MotorControllers.DRIVE_LEFT_FRONT_CAN)
-    val leftMidF = CANTalon(Constants.MotorControllers.DRIVE_LEFT_MIDF_CAN)
-    val leftMidR = CANTalon(Constants.MotorControllers.DRIVE_LEFT_MIDR_CAN)
-    val leftRear = CANTalon(Constants.MotorControllers.DRIVE_LEFT_REAR_CAN)
+    val leftFront = TalonSRX(Constants.MotorControllers.DRIVE_LEFT_FRONT_CAN)
+    val leftMidF = TalonSRX(Constants.MotorControllers.DRIVE_LEFT_MIDF_CAN)
+    val leftMidR = TalonSRX(Constants.MotorControllers.DRIVE_LEFT_MIDR_CAN)
+    val leftRear = TalonSRX(Constants.MotorControllers.DRIVE_LEFT_REAR_CAN)
 
-    val rightFront = CANTalon(Constants.MotorControllers.DRIVE_RIGHT_FRONT_CAN)
-    val rightMidF = CANTalon(Constants.MotorControllers.DRIVE_RIGHT_MIDF_CAN)
-    val rightMidR = CANTalon(Constants.MotorControllers.DRIVE_RIGHT_MIDR_CAN)
-    val rightRear = CANTalon(Constants.MotorControllers.DRIVE_RIGHT_REAR_CAN)
+    val rightFront = TalonSRX(Constants.MotorControllers.DRIVE_RIGHT_FRONT_CAN)
+    val rightMidF = TalonSRX(Constants.MotorControllers.DRIVE_RIGHT_MIDF_CAN)
+    val rightMidR = TalonSRX(Constants.MotorControllers.DRIVE_RIGHT_MIDR_CAN)
+    val rightRear = TalonSRX(Constants.MotorControllers.DRIVE_RIGHT_REAR_CAN)
 
-    val left = MotorGroup(leftFront, leftMidF, leftMidR, leftRear)
-    val right = MotorGroup(rightFront, rightMidF, rightMidR, rightRear)
+    val left = SensoredGearbox(4096f, leftFront, leftMidF, leftMidR, leftRear, SmartMotorController.FeedbackDevice.CtreMagEncoder_Relative)
+    val right = SensoredGearbox(4096f, rightFront, rightMidF, rightMidR, rightRear, SmartMotorController.FeedbackDevice.CtreMagEncoder_Relative)
+
+    val tank = SensoredTank(left, right, false, true, Constants.DrivetrainParameters.WHEEL_RADIUS, Constants.DrivetrainParameters.WHEEL_DIST)
 
     val shifter = Solenoid(Constants.Pneumatics.SHIFTER_SOLENOID)
-
-    fun fuse(master: Int, vararg slaves: CANTalon) {
-        slaves.forEach {
-            it.changeControlMode(CANTalon.TalonControlMode.Follower)
-            it.set(master.toDouble())
-        }
-    }
-
-    setup {
-        right.inverted = true
-        fuse(Constants.MotorControllers.DRIVE_LEFT_FRONT_CAN, leftMidF, leftMidR, leftRear)
-        fuse(Constants.MotorControllers.DRIVE_RIGHT_FRONT_CAN, rightMidF, rightMidR, rightRear)
-    }
 
     val shiftMachine = stateMachine(SHIFTER_MACHINE) {
         fun shiftHigh() = shifter.set(true)
@@ -103,7 +94,7 @@ val Drivetrain: Subsystem = buildSubsystem {
     }
 
     on (Events.TELEOP_ENABLED) {
-        shiftMachine.setState(ShifterStates.AUTO)
+        shiftMachine.setState(ShifterStates.HIGH)
     }
 
 
