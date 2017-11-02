@@ -1,11 +1,14 @@
 package org.team401.offseason2017.subsystems
 
 import com.ctre.phoenix.Drive.SensoredTank
+import com.ctre.phoenix.Drive.Styles
 import com.ctre.phoenix.Mechanical.SensoredGearbox
 import com.ctre.phoenix.MotorControl.CAN.TalonSRX
 import com.ctre.phoenix.MotorControl.SmartMotorController
 import edu.wpi.first.wpilibj.Solenoid
 import org.team401.offseason2017.Constants
+import org.team401.offseason2017.DriveStick
+import org.team401.offseason2017.Wheel
 import org.team401.snakeskin.dsl.buildSubsystem
 import org.team401.snakeskin.event.Events
 import org.team401.snakeskin.subsystem.Subsystem
@@ -86,7 +89,17 @@ val Drivetrain: Subsystem = buildSubsystem {
     }
 
     val driveMachine = stateMachine(DRIVETRAIN_MACHINE) {
-        
+
+        var forward = DriveStick.readAxis { PITCH }
+        var turn = Wheel.readAxis { WHEEL }
+
+        //theoretical drivecode
+        default {
+            forward = DriveStick.readAxis { PITCH }
+            turn = Wheel.readAxis { WHEEL }
+            
+            tank.set(Styles.Basic.PercentOutput,forward.toFloat(), turn.toFloat())
+        }
     }
 
     on (Events.AUTO_ENABLED) {
