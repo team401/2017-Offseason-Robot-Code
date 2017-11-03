@@ -1,10 +1,10 @@
 package org.team401.offseason2017
 
 import org.team401.offseason2017.subsystems.*
-import org.team401.snakeskin.dsl.HumanControls
-import org.team401.snakeskin.dsl.machine
-import org.team401.snakeskin.dsl.send
-import org.team401.snakeskin.logic.Direction
+import org.snakeskin.dsl.HumanControls
+import org.snakeskin.dsl.machine
+import org.snakeskin.dsl.send
+import org.snakeskin.logic.Direction
 
 /*
  * 2017-Offseason-Robot-Code - Created on 9/26/17
@@ -18,8 +18,10 @@ import org.team401.snakeskin.logic.Direction
  * @author Cameron Earle
  * @version 9/26/17
  */
-
-val Wheel = HumanControls.drivingForceGT(0)
+/*
+val Wheel = HumanControls.drivingForceGT(0) {
+    invertAxis(Axes.WHEEL)
+}
 
 val DriveStick = HumanControls.attack3(1) {
     whenButton(Buttons.TRIGGER) {
@@ -27,36 +29,60 @@ val DriveStick = HumanControls.attack3(1) {
             Drivetrain.machine(SHIFTER_MACHINE).setState(ShifterStates.LOW)
         }
         released {
-            Drivetrain.machine(SHIFTER_MACHINE).setState(ShifterStates.AUTO)
+            Drivetrain.machine(SHIFTER_MACHINE).setState(ShifterStates.HIGH)
         }
     }
 }
+*/
 
-val MashStick = HumanControls.extreme3d(2) {
-    /*
-    whenHatChanged(Hats.STICK_HAT) {
-        when (it) {
-            Direction.NORTH -> Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.CLIMB)
-            Direction.SOUTH -> Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.OFF)
-        }
-    }
-    whenButton(Buttons.BASE_BOTTOM_RIGHT) {
+val Gamepad = HumanControls.f310(0) {
+    whenButton(Buttons.A) {
         pressed {
-            Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.MANUAL_CLIMB)
+            Sequences.getGear()
         }
         released {
-            Climber.machine(CLIMBER_MACHINE).setState(ClimberStates.OFF)
+            Sequences.stowArm()
+        }
+    }
+
+    whenButton(Buttons.B) {
+        pressed {
+            Sequences.score()
+        }
+    }
+
+    whenButton(Buttons.X) {
+        pressed {
+            Sequences.stowArm()
+        }
+    }
+
+    whenButton(Buttons.Y) {
+        pressed {
+            Sequences.prepareScore()
+        }
+    }
+
+    /*
+    whenButton(Buttons.RIGHT_STICK) {
+        pressed {
+            Sequences.startClimb()
+        }
+    }
+
+    whenButton(Buttons.LEFT_STICK) {
+        pressed {
+            Sequences.stopClimb()
+        }
+    }
+
+    whenButton(Buttons.BACK) {
+        pressed {
+            Sequences.manualClimb()
+        }
+        released {
+            Sequences.stopClimb()
         }
     }
     */
-
-    whenHatChanged(Hats.STICK_HAT) {
-        val arm = GearHolder.machine(GEAR_ARM_MACHINE)
-        when (it) {
-            Direction.WEST -> arm.setState(GearArmStates.STOW)
-            Direction.SOUTH -> arm.setState(GearArmStates.DOWN)
-            Direction.EAST -> arm.setState(GearArmStates.DOWN_SCORE)
-            Direction.NORTH -> arm.setState(GearArmStates.UP)
-        }
-    }
 }

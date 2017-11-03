@@ -5,10 +5,10 @@ import com.ctre.phoenix.MotorControl.SmartMotorController
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.team401.offseason2017.Constants
 import org.team401.offseason2017.LightBar
-import org.team401.snakeskin.component.LightLink
-import org.team401.snakeskin.dsl.buildSubsystem
-import org.team401.snakeskin.event.Events
-import org.team401.snakeskin.subsystem.Subsystem
+import org.snakeskin.component.LightLink
+import org.snakeskin.dsl.buildSubsystem
+import org.snakeskin.event.Events
+import org.snakeskin.subsystem.Subsystem
 
 /*
  * 2017-Offseason-Robot-Code - Created on 9/26/17
@@ -39,6 +39,8 @@ object GearIntakeStates {
 }
 const val GEAR_INTAKE_MACHINE = "gear_intake"
 
+var GEAR_PRESENT = true
+
 val GearHolder: Subsystem = buildSubsystem {
     val arm = TalonSRX(Constants.MotorControllers.GEAR_ARM_CAN)
     val wheels = TalonSRX(Constants.MotorControllers.GEAR_INTAKE_CAN)
@@ -49,6 +51,7 @@ val GearHolder: Subsystem = buildSubsystem {
         arm.configMaxOutputVoltage(6.0)
 
         wheels.isSafetyEnabled = false
+        wheels.inverted = true
 
         arm.setPosition(arm.pulseWidthPosition % 4096)
     }
@@ -58,9 +61,28 @@ val GearHolder: Subsystem = buildSubsystem {
         fun openLoop() = wheels.changeControlMode(SmartMotorController.TalonControlMode.PercentVbus)
 
         state(GearIntakeStates.COLLECT) {
+            var counter = 0
             entry {
+                GEAR_PRESENT = false
                 voltage()
                 wheels.set(Constants.IntakeParameters.COLLECT_VOLTAGE)
+            }
+            action {
+                if (wheels.outputCurrent > Constants.IntakeParameters.HAVE_GEAR_CURRENT) {
+                    counter++
+                } else {
+                    counter = 0
+                }
+
+                if (counter >= Constants.IntakeParameters.GEAR_COUNTER_MAX) {
+                    GEAR_PRESENT = true
+                    if (counter == Constants.IntakeParameters.GEAR_COUNTER_MAX) {
+                        LightBar.signal(LightLink.Color.GREEN)
+                        setState(GearIntakeStates.RETAIN)
+                    }
+                } else {
+                    GEAR_PRESENT = false
+                }
             }
         }
 
@@ -91,11 +113,15 @@ val GearHolder: Subsystem = buildSubsystem {
             arm.configMaxOutputVoltage(Constants.ArmParameters.NORM_VOLTAGE)
             arm.changeControlMode(SmartMotorController.TalonControlMode.Position)
             arm.p = Constants.ArmParameters.P
+            arm.i = Constants.ArmParameters.I
+            arm.d = Constants.ArmParameters.D
         }
         fun closedLoopScore() {
             arm.configMaxOutputVoltage(Constants.ArmParameters.SCORE_VOLTAGE)
             arm.changeControlMode(SmartMotorController.TalonControlMode.Position)
             arm.p = Constants.ArmParameters.SCORE_P
+            arm.i = Constants.ArmParameters.SCORE_I
+            arm.d = Constants.ArmParameters.SCORE_D
         }
         fun openLoop() = arm.changeControlMode(SmartMotorController.TalonControlMode.PercentVbus)
 
@@ -133,11 +159,6 @@ val GearHolder: Subsystem = buildSubsystem {
             entry {
                 openLoop()
                 arm.set(0.0)
-            }
-            action {
-                SmartDashboard.putNumber("pos", arm.position)
-                SmartDashboard.putNumber("encPos", arm.encPosition.toDouble())
-                SmartDashboard.putNumber("pwPos", arm.pulseWidthPosition.toDouble())
             }
         }
     }

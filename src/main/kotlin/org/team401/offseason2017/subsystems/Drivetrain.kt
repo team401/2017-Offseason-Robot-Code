@@ -1,19 +1,26 @@
 package org.team401.offseason2017.subsystems
 
 import com.ctre.phoenix.Drive.SensoredTank
+import com.ctre.phoenix.Drive.Styles
 import com.ctre.phoenix.Mechanical.SensoredGearbox
 import com.ctre.phoenix.MotorControl.CAN.TalonSRX
 import com.ctre.phoenix.MotorControl.SmartMotorController
+import com.ctre.phoenix.Schedulers.SequentialScheduler
+import com.ctre.phoenix.Sensors.PigeonImu
 import edu.wpi.first.wpilibj.Solenoid
 import org.team401.offseason2017.Constants
-import org.team401.snakeskin.dsl.buildSubsystem
-import org.team401.snakeskin.event.Events
-import org.team401.snakeskin.subsystem.Subsystem
+//import org.team401.offseason2017.DriveStick
+//import org.team401.offseason2017.Wheel
+import org.snakeskin.dsl.buildSubsystem
+import org.snakeskin.event.Events
+import org.snakeskin.subsystem.Subsystem
+import org.team401.offseason2017.AutoSequences
+import org.team401.offseason2017.Gamepad
 
 /*
  * 2017-Offseason-Robot-Code - Created on 9/26/17
  * Author: Cameron Earle
- * 
+ *
  * This code is licensed under the GNU GPL v3
  * You can find more info in the LICENSE file at project root
  */
@@ -26,12 +33,13 @@ import org.team401.snakeskin.subsystem.Subsystem
 object ShifterStates {
     const val HIGH = "high"
     const val LOW = "low"
-    const val AUTO = "auto"
+    //const val AUTO = "auto"
 }
 const val SHIFTER_MACHINE = "shifting"
 
 object DrivetrainStates {
-
+    const val OPEN_LOOP = "open_loop"
+    const val AUTO_SEQUENCE = "auto"
 }
 const val DRIVETRAIN_MACHINE = "drive"
 
@@ -48,10 +56,23 @@ val Drivetrain: Subsystem = buildSubsystem {
 
     val left = SensoredGearbox(4096f, leftFront, leftMidF, leftMidR, leftRear, SmartMotorController.FeedbackDevice.CtreMagEncoder_Relative)
     val right = SensoredGearbox(4096f, rightFront, rightMidF, rightMidR, rightRear, SmartMotorController.FeedbackDevice.CtreMagEncoder_Relative)
-
-    val tank = SensoredTank(left, right, false, true, Constants.DrivetrainParameters.WHEEL_RADIUS, Constants.DrivetrainParameters.WHEEL_DIST)
+    val drive = SensoredTank(left, right, false, true, Constants.DrivetrainParameters.WHEEL_RADIUS, Constants.DrivetrainParameters.WHEEL_DIST)
+    val imu = PigeonImu(leftRear)
 
     val shifter = Solenoid(Constants.Pneumatics.SHIFTER_SOLENOID)
+
+    val scheduler = SequentialScheduler(20)
+
+    setup {
+        AutoSequences.setDrivetrain(drive)
+        AutoSequences.setImu(imu)
+        leftFront.enableBrakeMode(false)
+        rightFront.enableBrakeMode(false)
+        leftFront.setCurrentLimit(Constants.DrivetrainParameters.CURRENT_LIMIT)
+        rightFront.setCurrentLimit(Constants.DrivetrainParameters.CURRENT_LIMIT)
+        leftFront.setVoltageRampRate(Constants.DrivetrainParameters.RAMP_RATE)
+        rightFront.setVoltageRampRate(Constants.DrivetrainParameters.RAMP_RATE)
+    }
 
     val shiftMachine = stateMachine(SHIFTER_MACHINE) {
         fun shiftHigh() = shifter.set(true)
@@ -69,15 +90,6 @@ val Drivetrain: Subsystem = buildSubsystem {
             }
         }
 
-        state (ShifterStates.AUTO) {
-            entry {
-                shiftHigh()
-            }
-            action {
-
-            }
-        }
-
         default {
             entry {
                 shifter.set(false)
@@ -86,15 +98,38 @@ val Drivetrain: Subsystem = buildSubsystem {
     }
 
     val driveMachine = stateMachine(DRIVETRAIN_MACHINE) {
-        
+        state (DrivetrainStates.OPEN_LOOP) {
+            action {
+                //drive.set(Styles.Basic.PercentOutput, Gamepad.readAxis { LEFT_Y }.toFloat(), Gamepad.readAxis { RIGHT_X }.toFloat())
+            }
+        }
+
+        state (DrivetrainStates.AUTO_SEQUENCE) {
+            entry {
+                scheduler.Stop()
+                scheduler.RemoveAll()
+                for (loopable in AutoSequences.ActiveAutoSequence) {
+                    scheduler.Add(loopable)
+                }
+                scheduler.Start()
+            }
+            action {
+                scheduler.Process()
+            }
+            exit {
+                scheduler.Stop()
+            }
+        }
     }
 
     on (Events.AUTO_ENABLED) {
         shiftMachine.setState(ShifterStates.LOW)
+
     }
 
     on (Events.TELEOP_ENABLED) {
         shiftMachine.setState(ShifterStates.HIGH)
+        driveMachine.setState(DrivetrainStates.OPEN_LOOP)
     }
 
 
