@@ -3,10 +3,7 @@ package org.team401.offseason2017
 import com.ctre.phoenix.Drive.SensoredTank
 import com.ctre.phoenix.Drive.Styles
 import com.ctre.phoenix.ILoopable
-import com.ctre.phoenix.Motion.ServoGoStraightWithImu
-import com.ctre.phoenix.Motion.ServoParameters
-import com.ctre.phoenix.Motion.ServoZeroTurn
-import com.ctre.phoenix.Motion.ServoZeroTurnWithImu
+import com.ctre.phoenix.Motion.*
 import com.ctre.phoenix.Sensors.PigeonImu
 
 object AutoSequences {
@@ -24,9 +21,10 @@ object AutoSequences {
     val ActiveAutoSequence = arrayListOf<ILoopable>()
 
     fun firstMoveForward(){
-        val params = ServoParameters()
+        val driveParams = ServoParameters()//pigeon
+        val distParams = ServoParameters()//for distance (encoders?)
 
-        val moveForward = ServoGoStraightWithImu(imu, tankDrive, Styles.Basic.PercentOutput, params, 0f,0f,10f)
+        val moveForward = ServoStraightDistanceWithImu(imu, tankDrive, Styles.Smart.PercentOutput, driveParams, distParams, 0f,10f)
 
         ActiveAutoSequence.add(moveForward)
     }
@@ -38,10 +36,11 @@ object AutoSequences {
 
         ActiveAutoSequence.add(turn)
     }
-    fun secondMove(){
-        val params = ServoParameters()
+    fun secondMove(heading: Float){
+        val driveParams = ServoParameters()//pigeon
+        val distParams = ServoParameters()//for distance (encoders?)
 
-        val moveForward = ServoGoStraightWithImu(imu, tankDrive, Styles.Basic.PercentOutput, params, 0f,0f,10f)
+        val moveForward = ServoStraightDistanceWithImu(imu, tankDrive, Styles.Smart.PercentOutput, driveParams, distParams, heading,3f)
 
         ActiveAutoSequence.add(moveForward)
     }

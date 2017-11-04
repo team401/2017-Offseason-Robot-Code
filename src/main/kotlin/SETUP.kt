@@ -75,12 +75,12 @@ fun auto() {
         paths.RIGHT_TO_AIRSHIP -> {
             AutoSequences.firstMoveForward()
             AutoSequences.turn(60f)
-            AutoSequences.secondMove()
+            AutoSequences.secondMove(60f)
         }
         paths.LEFT_TO_AIRSHIP -> {
             AutoSequences.firstMoveForward()
             AutoSequences.turn(-60f)
-            AutoSequences.secondMove()
+            AutoSequences.secondMove(-60f)
         }
     }
     
