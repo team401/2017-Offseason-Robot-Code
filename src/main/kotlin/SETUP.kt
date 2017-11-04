@@ -14,6 +14,7 @@ import org.snakeskin.registry.Sensors
 import org.snakeskin.registry.Subsystems
 import org.team401.offseason2017.*
 import org.team401.offseason2017.subsystems.*
+import java.nio.file.Paths
 
 /*
  * 2017-Offseason-Robot-Code - Created on 9/26/17
@@ -59,6 +60,29 @@ fun setup() {
 }
 
 fun auto() {
+
+    val choice = SendableChooser<Enum<paths>>()
+    choice.addDefault("Center to airship", paths.CENTER_TO_AIRSHIP)
+    choice.addObject("Right to airship", paths.RIGHT_TO_AIRSHIP)
+    choice.addObject("Left to airship", paths.LEFT_TO_AIRSHIP)
+
+    SmartDashboard.putData("Auto sequence", choice)
+
+    when(choice.selected){
+        paths.CENTER_TO_AIRSHIP -> {
+            AutoSequences.firstMoveForward()
+        }
+        paths.RIGHT_TO_AIRSHIP -> {
+            AutoSequences.firstMoveForward()
+            AutoSequences.turn(60f)
+            AutoSequences.secondMove()
+        }
+        paths.LEFT_TO_AIRSHIP -> {
+            AutoSequences.firstMoveForward()
+            AutoSequences.turn(-60f)
+            AutoSequences.secondMove()
+        }
+    }
     
     Drivetrain.machine(DRIVETRAIN_MACHINE).setState(DrivetrainStates.AUTO_SEQUENCE)
 }
