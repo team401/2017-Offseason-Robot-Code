@@ -1,6 +1,8 @@
 //import org.team401.offseason2017.DriveStick
 import com.ctre.phoenix.ILoopable
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.snakeskin.component.LightLink
 import org.snakeskin.dsl.machine
 //import org.team401.offseason2017.MashStick
@@ -36,6 +38,10 @@ class LoopableTask(private val task: () -> Unit): ILoopable {
     override fun OnStop() {}
 }
 
+enum class paths {
+    CENTER_TO_AIRSHIP, RIGHT_TO_AIRSHIP, LEFT_TO_AIRSHIP
+}
+
 fun setup() {
     Subsystems.add(GearHolder, Drivetrain, Climber)
     Controllers.add(Gamepad)
@@ -53,5 +59,6 @@ fun setup() {
 }
 
 fun auto() {
+    
     Drivetrain.machine(DRIVETRAIN_MACHINE).setState(DrivetrainStates.AUTO_SEQUENCE)
 }
