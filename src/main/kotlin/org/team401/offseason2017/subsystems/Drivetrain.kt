@@ -68,6 +68,8 @@ val Drivetrain: Subsystem = buildSubsystem {
         AutoSequences.setImu(imu)
         leftFront.enableBrakeMode(false)
         rightFront.enableBrakeMode(false)
+        leftFront.reverseSensor(false)
+        rightFront.reverseSensor(true)
         leftFront.setCurrentLimit(Constants.DrivetrainParameters.CURRENT_LIMIT)
         rightFront.setCurrentLimit(Constants.DrivetrainParameters.CURRENT_LIMIT)
         leftFront.setVoltageRampRate(Constants.DrivetrainParameters.RAMP_RATE)
@@ -100,7 +102,7 @@ val Drivetrain: Subsystem = buildSubsystem {
     val driveMachine = stateMachine(DRIVETRAIN_MACHINE) {
         state (DrivetrainStates.OPEN_LOOP) {
             action {
-                //drive.set(Styles.Basic.PercentOutput, Gamepad.readAxis { LEFT_Y }.toFloat(), Gamepad.readAxis { RIGHT_X }.toFloat())
+                drive.set(Styles.Basic.PercentOutput, Gamepad.readAxis { LEFT_Y }.toFloat(), Gamepad.readAxis { RIGHT_X }.toFloat())
             }
         }
 

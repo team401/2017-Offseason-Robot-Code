@@ -1,6 +1,9 @@
 //import org.team401.offseason2017.DriveStick
 import com.ctre.phoenix.ILoopable
+import com.ctre.phoenix.Motion.ServoGoStraightWithImu
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.snakeskin.component.LightLink
 import org.snakeskin.dsl.machine
 //import org.team401.offseason2017.MashStick
@@ -26,32 +29,48 @@ import org.team401.offseason2017.subsystems.*
  * @version 9/26/17
  */
 
-class LoopableTask(private val task: () -> Unit): ILoopable {
-    override fun OnStart() {
-        task()
-    }
-
-    override fun IsDone() = true
-    override fun OnLoop() {}
-    override fun OnStop() {}
+enum class AutoOptions {
+    CENTER_GEAR,
+    RIGHT_GEAR,
+    LEFT_GEAR,
+    NO_AUTO
 }
+
+val AUTO_CHOOSER = SendableChooser<AutoOptions>()
 
 fun setup() {
     Subsystems.add(GearHolder, Drivetrain, Climber)
     Controllers.add(Gamepad)
     Sensors.add(Last30Sensor)
     LightBar
-    GearSensor
 
     on (Events.DISABLED) {
         LightBar.rainbow()
     }
 
     on (Events.ENABLED) {
-        LightBar.set(LightLink.Color.WHITE, LightLink.Action.SOLID, LightLink.Speed.SLOW)
+        LightBar.off()
     }
+
+    AUTO_CHOOSER.addDefault("Center Gear", AutoOptions.CENTER_GEAR)
+    AUTO_CHOOSER.addObject("Left Gear", AutoOptions.LEFT_GEAR)
+    AUTO_CHOOSER.addObject("Right Gear", AutoOptions.RIGHT_GEAR)
+    AUTO_CHOOSER.addObject("No Auto", AutoOptions.NO_AUTO)
+
+    SmartDashboard.putData("Auto Mode", AUTO_CHOOSER)
 }
 
 fun auto() {
+    AutoSequences.zero()
+    Sequences.prepareScore()
+    val selectedAuto = AUTO_CHOOSER.selected
+
+    when (selectedAuto) {
+        AutoOptions.CENTER_GEAR -> AutoSequences.scoreCenterGear()
+        AutoOptions.LEFT_GEAR -> AutoSequences.scoreLeftGear()
+        AutoOptions.RIGHT_GEAR -> AutoSequences.scoreRightGear()
+        else -> {}
+    }
+
     Drivetrain.machine(DRIVETRAIN_MACHINE).setState(DrivetrainStates.AUTO_SEQUENCE)
 }

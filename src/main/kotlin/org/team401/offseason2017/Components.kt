@@ -7,8 +7,6 @@ import org.snakeskin.dsl.Sensors
 
 val LightBar = LightLink()
 
-val GearSensor = DigitalInput(0)
-
 val Last30Sensor = Sensors.booleanSensor({
     DriverStation.getInstance().matchTime <= 30
             && !DriverStation.getInstance().isAutonomous

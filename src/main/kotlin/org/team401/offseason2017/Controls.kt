@@ -36,6 +36,8 @@ val DriveStick = HumanControls.attack3(1) {
 */
 
 val Gamepad = HumanControls.f310(0) {
+    invertAxis(Axes.RIGHT_X)
+
     whenButton(Buttons.A) {
         pressed {
             Sequences.getGear()

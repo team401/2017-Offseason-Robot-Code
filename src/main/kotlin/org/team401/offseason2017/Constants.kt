@@ -52,7 +52,7 @@ object Constants {
         const val EJECT_VOLTAGE = -6.0
 
         const val HAVE_GEAR_CURRENT = 10.0
-        const val GEAR_COUNTER_MAX = 10
+        const val GEAR_COUNTER_MAX = 15
     }
 
     object ClimberParameters {
@@ -66,7 +66,7 @@ object Constants {
   
     object DrivetrainParameters {
         const val WHEEL_RADIUS = 2f
-        const val WHEEL_DIST = 5.5f
+        const val WHEEL_DIST = 26f
 
         const val CURRENT_LIMIT = 30
         const val RAMP_RATE = 40.0

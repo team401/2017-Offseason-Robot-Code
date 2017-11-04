@@ -90,6 +90,7 @@ val GearHolder: Subsystem = buildSubsystem {
             entry {
                 voltage()
                 wheels.set(Constants.IntakeParameters.EJECT_VOLTAGE)
+                GEAR_PRESENT = false
             }
         }
 
