@@ -1,6 +1,5 @@
 import com.ctre.phoenix.Drive.SensoredTank
 import com.ctre.phoenix.Drive.Styles
-import com.ctre.phoenix.Drive.Tank
 import com.ctre.phoenix.Mechanical.SensoredGearbox
 import com.ctre.phoenix.Motion.ServoGoStraightWithImu
 import com.ctre.phoenix.Motion.ServoParameters
@@ -37,7 +36,7 @@ val tank = SensoredTank(left, right, false, true, Constants.DrivetrainParameters
 
 val imu = PigeonImu(leftFront)//Perhaps not really where the Pigeon is
 
-val schedule = SequentialScheduler(10)
+val schedule = SequentialScheduler(20)
 
 val drive = ServoParameters()
 
@@ -46,7 +45,6 @@ val drive = ServoParameters()
 val sendable = SendableChooser<Enum<Choices>>()
 
 fun auto(){
-
     //adds options to the sendable chooser
     sendable.addObject("Center to Airship", Choices.CENTER_TO_AIRSHIP)//do I need?
     sendable.addObject("Right to Airship", Choices.RIGHT_TO_AIRSHIP)
@@ -77,7 +75,7 @@ fun leftToAirship() {
     val drive = ServoParameters()
     val driveTurn = ServoParameters()
 
-    //instert PID to drive and driveTurn here
+    //insert PID to drive and driveTurn here
 
     val driveForward = ServoGoStraightWithImu(imu, tank, Styles.Basic.PercentOutput, drive, 10f, 0f, 50f)
 

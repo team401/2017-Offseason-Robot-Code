@@ -97,7 +97,7 @@ val Drivetrain: Subsystem = buildSubsystem {
         default {
             forward = DriveStick.readAxis { PITCH }
             turn = Wheel.readAxis { WHEEL }
-            
+
             tank.set(Styles.Basic.PercentOutput,forward.toFloat(), turn.toFloat())
         }
     }
