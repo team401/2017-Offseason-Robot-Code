@@ -36,6 +36,7 @@ object Sequences {
 
     fun startClimb() {
         climber.setState(ClimberStates.CLIMB)
+        LightBar.breathe(LightLink.Color.ORANGE)
     }
 
     fun stopClimb() {

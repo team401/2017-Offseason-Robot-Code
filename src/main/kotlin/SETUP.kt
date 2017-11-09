@@ -40,7 +40,7 @@ val AUTO_CHOOSER = SendableChooser<AutoOptions>()
 
 fun setup() {
     Subsystems.add(GearHolder, Drivetrain, Climber)
-    Controllers.add(Gamepad)
+    Controllers.add(Wheel, DriveStick, Gamepad)
     Sensors.add(Last30Sensor)
     LightBar
 
@@ -61,9 +61,12 @@ fun setup() {
 }
 
 fun auto() {
+    AutoSequences.clearSequences()
     AutoSequences.zero()
     Sequences.prepareScore()
+    /*
     val selectedAuto = AUTO_CHOOSER.selected
+
 
     when (selectedAuto) {
         AutoOptions.CENTER_GEAR -> AutoSequences.scoreCenterGear()
@@ -71,6 +74,8 @@ fun auto() {
         AutoOptions.RIGHT_GEAR -> AutoSequences.scoreRightGear()
         else -> {}
     }
+    */
+    AutoSequences.scoreLeftGear()
 
     Drivetrain.machine(DRIVETRAIN_MACHINE).setState(DrivetrainStates.AUTO_SEQUENCE)
 }

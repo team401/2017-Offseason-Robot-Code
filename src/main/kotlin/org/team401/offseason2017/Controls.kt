@@ -5,6 +5,7 @@ import org.snakeskin.dsl.HumanControls
 import org.snakeskin.dsl.machine
 import org.snakeskin.dsl.send
 import org.snakeskin.logic.Direction
+import org.snakeskin.logic.scalers.SquareScaler
 
 /*
  * 2017-Offseason-Robot-Code - Created on 9/26/17
@@ -18,12 +19,15 @@ import org.snakeskin.logic.Direction
  * @author Cameron Earle
  * @version 9/26/17
  */
-/*
+
 val Wheel = HumanControls.drivingForceGT(0) {
-    invertAxis(Axes.WHEEL)
+    scaleAxis(Axes.WHEEL, SquareScaler)
 }
 
 val DriveStick = HumanControls.attack3(1) {
+    scaleAxis(Axes.PITCH, SquareScaler)
+    invertAxis(Axes.PITCH)
+
     whenButton(Buttons.TRIGGER) {
         pressed {
             Drivetrain.machine(SHIFTER_MACHINE).setState(ShifterStates.LOW)
@@ -33,9 +37,9 @@ val DriveStick = HumanControls.attack3(1) {
         }
     }
 }
-*/
 
-val Gamepad = HumanControls.f310(0) {
+
+val Gamepad = HumanControls.f310(2) {
     invertAxis(Axes.RIGHT_X)
 
     whenButton(Buttons.A) {
@@ -65,7 +69,7 @@ val Gamepad = HumanControls.f310(0) {
         }
     }
 
-    /*
+
     whenButton(Buttons.RIGHT_STICK) {
         pressed {
             Sequences.startClimb()
@@ -86,5 +90,5 @@ val Gamepad = HumanControls.f310(0) {
             Sequences.stopClimb()
         }
     }
-    */
+
 }
