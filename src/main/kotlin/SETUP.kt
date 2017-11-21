@@ -1,6 +1,7 @@
 //import org.team401.offseason2017.DriveStick
 import com.ctre.phoenix.ILoopable
 import com.ctre.phoenix.Motion.ServoGoStraightWithImu
+import edu.wpi.first.wpilibj.CameraServer
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -58,6 +59,10 @@ fun setup() {
     AUTO_CHOOSER.addObject("No Auto", AutoOptions.NO_AUTO)
 
     SmartDashboard.putData("Auto Mode", AUTO_CHOOSER)
+
+
+    CameraServer.getInstance().startAutomaticCapture()
+
 }
 
 fun auto() {

@@ -7,6 +7,7 @@ import com.ctre.phoenix.MotorControl.CAN.TalonSRX
 import com.ctre.phoenix.MotorControl.SmartMotorController
 import com.ctre.phoenix.Schedulers.SequentialScheduler
 import com.ctre.phoenix.Sensors.PigeonImu
+import edu.wpi.first.wpilibj.CameraServer
 import edu.wpi.first.wpilibj.Solenoid
 //import org.team401.offseason2017.DriveStick
 //import org.team401.offseason2017.Wheel
