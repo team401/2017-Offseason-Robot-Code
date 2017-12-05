@@ -60,7 +60,6 @@ fun setup() {
 
     SmartDashboard.putData("Auto Mode", AUTO_CHOOSER)
 
-
     CameraServer.getInstance().startAutomaticCapture()
 
 }

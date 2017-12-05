@@ -185,6 +185,16 @@ object AutoSequences {
 
         add(LoopableDrive(12.0*12, 2.0))
     }
+    fun betaTest(){
+        val turningParams = ServoParameters()
+        val drivingParams = ServoParameters()
+        val distance = 10f;
+        val turn = 0f;
+
+        val move = ServoStraightDistanceWithImu(imu, tankDrive, Styles.Smart.PercentOutput, drivingParams, turningParams, distance, turn)
+
+        add(move)
+    }
 
 }
 
