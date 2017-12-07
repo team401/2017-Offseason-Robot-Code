@@ -1,6 +1,8 @@
 //import org.team401.offseason2017.DriveStick
 import com.ctre.phoenix.ILoopable
+import com.ctre.phoenix.Mechanical.SensoredGearbox
 import com.ctre.phoenix.Motion.ServoGoStraightWithImu
+import com.ctre.phoenix.MotorControl.SmartMotorController
 import edu.wpi.first.wpilibj.CameraServer
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -11,6 +13,7 @@ import org.snakeskin.dsl.machine
 //import org.team401.offseason2017.Wheel
 import org.snakeskin.dsl.on
 import org.snakeskin.event.Events
+import org.snakeskin.registry.Autos
 import org.snakeskin.registry.Controllers
 import org.snakeskin.registry.Sensors
 import org.snakeskin.registry.Subsystems
@@ -43,6 +46,11 @@ fun setup() {
     Subsystems.add(GearHolder, Drivetrain, Climber)
     Controllers.add(Wheel, DriveStick, Gamepad)
     Sensors.add(Last30Sensor)
+
+
+    Autos.add(AutoSequences.AutoTest)
+
+
     LightBar
 
     on (Events.DISABLED) {
@@ -53,17 +61,19 @@ fun setup() {
         LightBar.off()
     }
 
+    /*
     AUTO_CHOOSER.addDefault("Center Gear", AutoOptions.CENTER_GEAR)
     AUTO_CHOOSER.addObject("Left Gear", AutoOptions.LEFT_GEAR)
     AUTO_CHOOSER.addObject("Right Gear", AutoOptions.RIGHT_GEAR)
     AUTO_CHOOSER.addObject("No Auto", AutoOptions.NO_AUTO)
 
     SmartDashboard.putData("Auto Mode", AUTO_CHOOSER)
+    */
 
     CameraServer.getInstance().startAutomaticCapture()
 
 }
-
+/*
 fun auto() {
     AutoSequences.clearSequences()
     AutoSequences.zero()
@@ -83,3 +93,4 @@ fun auto() {
 
     Drivetrain.machine(DRIVETRAIN_MACHINE).setState(DrivetrainStates.AUTO_SEQUENCE)
 }
+        */

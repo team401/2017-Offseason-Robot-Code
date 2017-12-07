@@ -9,7 +9,9 @@ import com.ctre.phoenix.MotorControl.ControlMode
 import com.ctre.phoenix.MotorControl.SmartMotorController
 import com.ctre.phoenix.Sensors.PigeonImu
 import edu.wpi.first.wpilibj.Timer
+import org.snakeskin.auto.Auto
 import org.snakeskin.component.LightLink
+import org.snakeskin.dsl.autoStep
 
 object AutoSequences {
     class LoopableTask(private val task: () -> Unit): ILoopable {
@@ -62,6 +64,7 @@ object AutoSequences {
     }
 
     class LoopableDrive(val distance: Double, val tolerance: Double): ILoopable {
+
         var done = false
         val driveMultiplier = .6
         val imuMultiplier = .01
@@ -185,16 +188,19 @@ object AutoSequences {
 
         add(LoopableDrive(12.0*12, 2.0))
     }
-    fun betaTest(){
-        val turningParams = ServoParameters()
-        val drivingParams = ServoParameters()
-        val distance = 10f;
-        val turn = 0f;
 
-        val move = ServoStraightDistanceWithImu(imu, tankDrive, Styles.Smart.PercentOutput, drivingParams, turningParams, distance, turn)
+    val servoGo = autoStep {
+        entry{
+            val driveParams = ServoParameters()
+            val turnParams = ServoParameters()
+            //heading, distance
+            ServoStraightDistanceWithImu(imu, tankDrive ,Styles.Smart.PercentOutput, driveParams, turnParams, 0f, 10f)
+        }
 
-        add(move)
     }
+
+    val AutoTest = Auto("Test of framework", LoopableDrive((5.0 *12), 10.0))
+    val ServoTest = Auto("CTRE Servo Test", servoGo)
 
 }
 

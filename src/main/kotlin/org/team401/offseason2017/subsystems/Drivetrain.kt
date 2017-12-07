@@ -39,10 +39,12 @@ const val SHIFTER_MACHINE = "shifting"
 object DrivetrainStates {
     const val OPEN_LOOP = "open_loop"
     const val AUTO_SEQUENCE = "auto"
+    const val TEST = "test"
 }
 const val DRIVETRAIN_MACHINE = "drive"
 
 val Drivetrain: Subsystem = buildSubsystem {
+
     val leftFront = TalonSRX(Constants.MotorControllers.DRIVE_LEFT_FRONT_CAN)
     val leftMidF = TalonSRX(Constants.MotorControllers.DRIVE_LEFT_MIDF_CAN)
     val leftMidR = TalonSRX(Constants.MotorControllers.DRIVE_LEFT_MIDR_CAN)
@@ -63,6 +65,7 @@ val Drivetrain: Subsystem = buildSubsystem {
     val scheduler = SequentialScheduler(10)
 
     setup {
+
         AutoSequences.setGearboxes(left, right)
         AutoSequences.setDrivetrain(drive)
         AutoSequences.setImu(imu)
@@ -75,6 +78,8 @@ val Drivetrain: Subsystem = buildSubsystem {
         leftFront.setVoltageRampRate(Constants.DrivetrainParameters.RAMP_RATE)
         rightFront.setVoltageRampRate(Constants.DrivetrainParameters.RAMP_RATE)
     }
+
+
 
     val shiftMachine = stateMachine(SHIFTER_MACHINE) {
         state (ShifterStates.HIGH) {
@@ -119,6 +124,106 @@ val Drivetrain: Subsystem = buildSubsystem {
                 scheduler.Stop()
             }
         }
+        state (DrivetrainStates.TEST){
+            action{
+                drive.set(Styles.Smart.PercentOutput, 100f, 0f)
+            }
+            exit{
+                drive.set(Styles.Smart.PercentOutput, 0f, 0f)
+            }
+        }
+        default {
+            drive.set(Styles.Smart.PercentOutput, 0f, 0f)
+        }
+    }
+
+    test("Drivetrain test"){
+        leftFront.set(100.0)
+        Thread.sleep(5000)
+        val leftFrontVolt = leftFront.outputVoltage
+        val leftFrontCurrent = leftFront.outputCurrent
+        println("leftFront Voltage : " + leftFrontVolt)
+        println("leftFront Current : " + leftFrontCurrent)
+        leftFront.set(0.0)
+
+        leftMidF.set(100.0)
+        Thread.sleep(5000)
+        val leftMidFVolt = leftMidF.outputVoltage
+        val leftMidFCurrent = leftMidF.outputCurrent
+        println("leftMidF Voltage : " + leftMidFVolt)
+        println("leftMidF Current : " + leftMidFCurrent)
+        leftMidF.set(0.0)
+
+        leftMidR.set(100.0)
+        Thread.sleep(5000)
+        val leftMidRVolt = leftMidR.outputVoltage
+        val leftMidRCurrent = leftMidR.outputCurrent
+        println("leftMidR Voltage : " + leftMidRVolt)
+        println("leftMidR Current : " + leftMidRCurrent)
+        leftMidR.set(0.0)
+
+        leftRear.set(100.0)
+        Thread.sleep(5000)
+        val leftRearVolt = leftRear.outputVoltage
+        val leftRearCurrent = leftRear.outputCurrent
+        println("leftRear Voltage : " + leftRearVolt)
+        println("leftRear Current : " + leftRearCurrent)
+        leftRear.set(0.0)
+
+        rightFront.set(100.0)
+        Thread.sleep(5000)
+        val rightFrontVolt = rightFront.outputVoltage
+        val rightFrontCurrent = rightFront.outputCurrent
+        println("rightFront Voltage : " + rightFrontVolt)
+        println("rightFront Current : " + rightFrontCurrent)
+        rightFront.set(0.0)
+
+        rightMidF.set(100.0)
+        Thread.sleep(5000)
+        val rightMidFVolt = rightMidF.outputVoltage
+        val rightMidFCurrent = rightMidF.outputCurrent
+        println("rightMidF Voltage : " + rightMidFVolt)
+        println("rightMidF Current : " + rightMidFCurrent)
+        rightMidF.set(0.0)
+
+        rightMidR.set(100.0)
+        Thread.sleep(5000)
+        val rightMidRVolt = rightMidR.outputVoltage
+        val rightMidRCurrent = rightMidR.outputCurrent
+        println("rightMidR Voltage : " + rightMidRVolt)
+        println("rightMidR Current : " + rightMidRCurrent)
+        rightMidR.set(0.0)
+
+        rightRear.set(100.0)
+        Thread.sleep(5000)
+        val rightRearVolt = rightRear.outputVoltage
+        val rightRearCurrent = rightRear.outputCurrent
+        println("rightRear Voltage : " + rightRearVolt)
+        println("rightRear Current : " + rightRearCurrent)
+        rightRear.set(0.0)
+
+        //check for discrepencies
+
+        val TOLERANCE = 5.0
+
+        if(leftFrontVolt - leftMidFVolt - leftMidRVolt - leftRearVolt - rightFrontVolt - rightMidFVolt
+                - rightMidRVolt - rightRearVolt <= (TOLERANCE*-8)) {
+            true
+        }
+        if(leftFrontCurrent - leftMidFCurrent - leftMidRCurrent - leftRearCurrent - rightFrontCurrent
+                - rightMidFCurrent - rightMidRCurrent - rightRearCurrent <= (TOLERANCE*-8)){
+            true
+        }
+        false
+
+
+        val TOLERENCE = 5.0
+
+
+
+        driveMachine.setState("default")
+
+        false
     }
 
     on (Events.AUTO_ENABLED) {
