@@ -9,6 +9,7 @@ import com.ctre.phoenix.MotorControl.ControlMode
 import com.ctre.phoenix.MotorControl.SmartMotorController
 import com.ctre.phoenix.Sensors.PigeonImu
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.snakeskin.auto.Auto
 import org.snakeskin.component.LightLink
 import org.snakeskin.dsl.autoStep
@@ -92,6 +93,11 @@ object AutoSequences {
             currentDistance = tankDrive.GetDistance().toDouble()
             currentYaw = imu.GetYawPitchRoll()[0]
 
+            println("Left front enc velocity: " + leftGearbox.GetMaster().encVelocity)
+            println("Right front enc velocity: " + rightGearbox.GetMaster().encVelocity)
+
+            SmartDashboard.putNumber("Left front enc velocity", leftGearbox.GetMaster().encVelocity.toDouble())
+            SmartDashboard.putNumber("Right front enc velocity", rightGearbox.GetMaster().encVelocity.toDouble())
 
             if (done || (Math.abs(currentDistance - distance) <= tolerance)) {
                 leftGearbox.GetMaster().enableBrakeMode(true)
@@ -199,8 +205,8 @@ object AutoSequences {
 
     }
 
-    val AutoTest = Auto("Test of framework", LoopableDrive((5.0 *12), 10.0))
-    val ServoTest = Auto("CTRE Servo Test", servoGo)
+    //val AutoTest = Auto("Test of framework", LoopableDrive((5.0 *12), 10.0))
+    //val ServoTest = Auto("CTRE Servo Test", servoGo)
 
 }
 
